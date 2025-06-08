@@ -1,0 +1,222 @@
+import zipfile
+import os
+
+# Base directory for complete website
+base_dir = "/mnt/data/sahil_hackz_complete_website"
+os.makedirs(base_dir, exist_ok=True)
+
+# index.html: Homepage
+index_html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAHIL HACKZ</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+    <h1 class="glow"><span style="color: white;">SAHIL</span> <span style="color: #39FF14;">HACKZ</span></h1>
+    <h2 class="typing neon-blue">WELCOME TO HACKER WORLD</h2>
+  </header>
+
+  <!-- Content Sections -->
+  <section id="video-section">
+    <!-- Dynamically loaded YouTube videos via Supabase -->
+  </section>
+  <section id="tools-section">
+    <!-- Dynamically loaded Tools entries -->
+  </section>
+  <section id="contact-section">
+    <!-- Contact details -->
+  </section>
+  <section id="about-section">
+    <!-- About information -->
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
+"""
+
+# admin.html: Admin Panel
+admin_html = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - SAHIL HACKZ</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Admin Header -->
+  <header>
+    <h1 class="glow"><span style="color: white;">SAHIL</span> <span style="color: #39FF14;">HACKZ</span></h1>
+    <h2 class="typing neon-blue">WELCOME TO ADMIN PANEL</h2>
+  </header>
+  
+  <!-- Login Section -->
+  <div id="login-section">
+    <input type="email" id="email" placeholder="Enter your email" /><br>
+    <input type="password" id="password" placeholder="Enter your password" /><br>
+    <button onclick="login()">Login</button>
+  </div>
+  
+  <!-- Admin Content -->
+  <div id="admin-content" style="display:none;">
+    <nav>
+      <button onclick="showSection('home')">HOME PAGE</button>
+      <button onclick="showSection('tools')">TOOLS</button>
+      <button onclick="showSection('contact')">CONTACT</button>
+      <button onclick="showSection('about')">ABOUT</button>
+    </nav>
+    <div id="home" class="admin-section">
+      <!-- YouTube videos management (Add/Edit/Delete) -->
+    </div>
+    <div id="tools" class="admin-section">
+      <!-- Tools management (PNG upload, name, Mediafire link) -->
+    </div>
+    <div id="contact" class="admin-section">
+      <!-- Contact info management -->
+    </div>
+    <div id="about" class="admin-section">
+      <!-- About text editing -->
+    </div>
+  </div>
+  <script src="admin.js"></script>
+</body>
+</html>
+"""
+
+# style.css: Global Styling
+style_css = """
+body {
+  font-family: 'Courier New', monospace;
+  background-color: black;
+  color: #39FF14;
+  margin: 0;
+  padding: 20px;
+}
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.glow {
+  font-size: 3em;
+  text-shadow: 0 0 10px #39FF14, 0 0 20px #39FF14;
+}
+.typing {
+  font-size: 1.5em;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid;
+  margin-top: 10px;
+  animation: typing 4s steps(30, end), blink-caret 0.75s step-end infinite;
+}
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #39FF14; }
+}
+/* Admin Panel Section Styles */
+nav button {
+  background: transparent;
+  border: 2px solid #39FF14;
+  color: #39FF14;
+  margin: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+.admin-section {
+  border: 2px solid #39FF14;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: black;
+}
+"""
+
+# script.js: Homepage JavaScript with Supabase integration setup
+script_js = """
+// Supabase Configuration
+const SUPABASE_URL = "https://zozluvaqqlmculdadjel.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpvemx1dmFxcWxtY3VsZGFkamVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0MDcxMjEsImV4cCI6MjA2NDk4MzEyMX0.OT88k7iFsBHKLErRfT2lzd0JApyseTdLTWtxuz6NJ3c";
+
+// Initialize Supabase client
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+console.log("Homepage loaded - Supabase connected");
+
+// Future code: Fetch videos, tools, contact, and about info from Supabase
+"""
+
+# admin.js: Admin Panel JavaScript for login and section control, Supabase integration added
+admin_js = """
+// Supabase Configuration (same as homepage)
+const SUPABASE_URL = "https://zozluvaqqlmculdadjel.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpvemx1dmFxcWxtY3VsZGFkamVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0MDcxMjEsImV4cCI6MjA2NDk4MzEyMX0.OT88k7iFsBHKLErRfT2lzd0JApyseTdLTWtxuz6NJ3c";
+
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Hardcoded admin credentials
+const validEmail = "sahilhackz@gmail.com";
+const validPassword = "PASS7870";
+
+function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  if (email === validEmail && password === validPassword) {
+    document.getElementById("login-section").style.display = "none";
+    document.getElementById("admin-content").style.display = "block";
+  } else {
+    alert("Invalid credentials!");
+  }
+}
+
+function showSection(id) {
+  const sections = document.querySelectorAll(".admin-section");
+  sections.forEach(section => section.style.display = "none");
+  document.getElementById(id).style.display = "block";
+}
+
+console.log("Admin panel loaded - Supabase connected");
+
+// Future code: Functions to add/edit/delete YouTube videos, Tools, Contact and About info via Supabase
+"""
+
+# Save files into base_dir
+file_dict = {
+  "index.html": index_html,
+  "admin.html": admin_html,
+  "style.css": style_css,
+  "script.js": script_js,
+  "admin.js": admin_js
+}
+for fname, content in file_dict.items():
+    with open(os.path.join(base_dir, fname), "w") as f:
+        f.write(content)
+
+# Create assets folder and placeholder favicon
+assets_dir = os.path.join(base_dir, "assets")
+os.makedirs(assets_dir, exist_ok=True)
+with open(os.path.join(assets_dir, "favicon.png"), "wb") as f:
+    f.write(b"PNGDATA")  # Replace with actual PNG binary data if available
+
+# Create final ZIP file
+zip_file = "/mnt/data/sahil_hackz_complete_website.zip"
+with zipfile.ZipFile(zip_file, "w") as zipf:
+    for root, dirs, files in os.walk(base_dir):
+        for file in files:
+            filepath = os.path.join(root, file)
+            arcname = os.path.relpath(filepath, base_dir)
+            zipf.write(filepath, arcname)
+
+print(zip_file)
